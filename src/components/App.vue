@@ -1,9 +1,14 @@
 <script setup>
 import { ref } from 'vue'
-const greeting = ref('Hello World!')
+import Panel from './Panel.vue'
+import TextEditor from './TextEditor.vue'
+
 </script>
 
 <template>
-  <input v-model="greeting" />
-  <p class="text-3xl font-bold underline">{{ greeting }}</p>
+  <div class="w-100 min-h-screen bg-dark-background text-default-text">
+    <Panel>
+      <TextEditor/>
+    </Panel>
+  </div>
 </template>
