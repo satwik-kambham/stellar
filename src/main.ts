@@ -1,5 +1,6 @@
-import { app, BrowserWindow } from 'electron';
+import { app, dialog, Menu, BrowserWindow } from 'electron';
 import path from 'path';
+import { promises as fsPromises } from 'fs';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -23,6 +24,39 @@ const createWindow = () => {
   } else {
     mainWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
   }
+
+  const menu_template = [
+    {
+      label: "File",
+      submenu: [
+        {
+          label: "Open File...",
+          click: async () => {
+            const result = await dialog.showOpenDialog(
+              mainWindow,
+              {
+                title: "Open File...",
+                buttonLabel: "Open",
+                properties: [
+                  "openFile",
+                  "showHiddenFiles"
+                ]
+              }
+            )
+            if (!result.canceled) {
+              // Open content of file
+              const filePath = result.filePaths[0]
+              const data = await fsPromises.readFile(filePath, 'utf-8')
+              mainWindow.webContents.send('file-contents', data)
+            }
+          }
+        }
+      ]
+    }
+  ]
+
+  const menu = Menu.buildFromTemplate(menu_template)
+  Menu.setApplicationMenu(menu)
 
   // Open the DevTools.
   mainWindow.webContents.openDevTools();

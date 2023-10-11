@@ -6,7 +6,9 @@ module.exports = {
     colors: {
       "dark-background": "#21252b",
       "light-background": "#282c34",
-      "default-text": "#abb2bf"
+      "default-text": "#abb2bf",
+      "current-line": "#2c313c",
+      "text-selected-background": "#3e4451",
     }
   },
   plugins: [],
